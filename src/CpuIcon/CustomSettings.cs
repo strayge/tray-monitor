@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Drawing;
 using TrayIconLibrary;
 
@@ -41,5 +41,12 @@ namespace CpuIcon
             set { SetValueByMethod(MethodBase.GetCurrentMethod(), value); }
         }
 
+        public string cpuUsageMetric
+        {
+            get { return GetValueByMethod(MethodBase.GetCurrentMethod(), "utility"); }
+            set { SetValueByMethod(MethodBase.GetCurrentMethod(), value); }
+        }
+
     }
 }
+

@@ -1,4 +1,4 @@
-﻿namespace CpuIcon
+namespace CpuIcon
 {
     partial class SettingsForm
     {
@@ -60,6 +60,11 @@
             this.cpuForegroundThrottlingButton = new System.Windows.Forms.Button();
             this.cpuForegroundThrottlingOpacity = new System.Windows.Forms.TrackBar();
             this.label10 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
+            this.cpuMetricUtility = new System.Windows.Forms.RadioButton();
+            this.cpuMetricTime = new System.Windows.Forms.RadioButton();
+
             this.panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cpuInterval)).BeginInit();
             this.panel9.SuspendLayout();
@@ -70,7 +75,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.cpuForegroundOpacity)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cpuForegroundThrottlingOpacity)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
+
             // 
             // colorDialog
             // 
@@ -85,7 +92,8 @@
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(609, 302);
+            this.buttonOk.Location = new System.Drawing.Point(609, 356);
+
             this.buttonOk.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(182, 51);
@@ -97,7 +105,8 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(418, 302);
+            this.buttonCancel.Location = new System.Drawing.Point(418, 356);
+
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(182, 51);
@@ -111,11 +120,57 @@
             this.panel10.Controls.Add(this.label4);
             this.panel10.Controls.Add(this.cpuInterval);
             this.panel10.Controls.Add(this.label1);
-            this.panel10.Location = new System.Drawing.Point(4, 234);
+            this.panel10.Location = new System.Drawing.Point(4, 290);
             this.panel10.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(788, 56);
             this.panel10.TabIndex = 80;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.cpuMetricTime);
+            this.panel2.Controls.Add(this.cpuMetricUtility);
+            this.panel2.Controls.Add(this.label11);
+            this.panel2.Location = new System.Drawing.Point(4, 234);
+            this.panel2.Margin = new System.Windows.Forms.Padding(5);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(788, 56);
+            this.panel2.TabIndex = 82;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(9, 14);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(197, 30);
+            this.label11.TabIndex = 50;
+            this.label11.Text = "CPU usage metric";
+            // 
+            // cpuMetricUtility
+            // 
+            this.cpuMetricUtility.AutoSize = true;
+            this.cpuMetricUtility.Location = new System.Drawing.Point(324, 12);
+            this.cpuMetricUtility.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cpuMetricUtility.Name = "cpuMetricUtility";
+            this.cpuMetricUtility.Size = new System.Drawing.Size(87, 34);
+            this.cpuMetricUtility.TabIndex = 51;
+            this.cpuMetricUtility.TabStop = true;
+            this.cpuMetricUtility.Text = "Utility";
+            this.cpuMetricUtility.UseVisualStyleBackColor = true;
+            // 
+            // cpuMetricTime
+            // 
+            this.cpuMetricTime.AutoSize = true;
+            this.cpuMetricTime.Location = new System.Drawing.Point(217, 12);
+            this.cpuMetricTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cpuMetricTime.Name = "cpuMetricTime";
+            this.cpuMetricTime.Size = new System.Drawing.Size(76, 34);
+            this.cpuMetricTime.TabIndex = 52;
+            this.cpuMetricTime.TabStop = true;
+            this.cpuMetricTime.Text = "Time";
+            this.cpuMetricTime.UseVisualStyleBackColor = true;
+
             // 
             // label4
             // 
@@ -425,11 +480,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(168F, 168F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(796, 360);
+            this.ClientSize = new System.Drawing.Size(796, 416);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel10);
             this.Controls.Add(this.panel9);
             this.Controls.Add(this.panel8);
+
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
@@ -454,7 +511,10 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cpuForegroundThrottlingOpacity)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
+
 
         }
 
@@ -492,5 +552,9 @@
         private System.Windows.Forms.Button cpuForegroundThrottlingButton;
         private System.Windows.Forms.TrackBar cpuForegroundThrottlingOpacity;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.RadioButton cpuMetricUtility;
+        private System.Windows.Forms.RadioButton cpuMetricTime;
     }
 }

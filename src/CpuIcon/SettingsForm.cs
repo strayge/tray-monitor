@@ -1,4 +1,4 @@
-﻿using TrayIconLibrary;
+using TrayIconLibrary;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -25,7 +25,10 @@ namespace CpuIcon
             cpuBorderText.Text = Utils.ColorToString(settings.borderColor);
             cpuBorderOpacity.Value = settings.borderColor.A;
             cpuInterval.Value = settings.updateInterval;
+            cpuMetricTime.Checked = settings.cpuUsageMetric.Equals("time", StringComparison.OrdinalIgnoreCase);
+            cpuMetricUtility.Checked = !cpuMetricTime.Checked;
         }
+
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
@@ -40,9 +43,11 @@ namespace CpuIcon
             settings.backgroundColor = Utils.ColorFromString(cpuBackgroundText.Text);
             settings.borderColor = Utils.ColorFromString(cpuBorderText.Text);
             settings.updateInterval = (int)cpuInterval.Value;
+            settings.cpuUsageMetric = cpuMetricTime.Checked ? "time" : "utility";
 
             Close();
         }
+
 
         // cpu
         private void cpuForegroundButton_Click(object sender, EventArgs e)

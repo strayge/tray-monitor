@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,28 +15,74 @@ namespace CpuIcon
         PerformanceCounter cpuCounter;
         List<Tuple<float, bool>> measurents = new List<Tuple<float, bool>>();
 
+
         public CustomTrayIcon()
         {
             settings = CustomSettings.Instance;
 
-            cpuCounter = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total");
+            ConfigureCpuCounter(settings.cpuUsageMetric);
 
             SetUpdateInterval(settings.updateInterval);
             EnableIcon();
         }
 
+        private void ConfigureCpuCounter(string metric)
+        {
+            string category;
+            string counter;
+            string instance;
+
+            if (string.Equals(metric, "time", StringComparison.OrdinalIgnoreCase))
+            {
+                category = "Processor";
+                counter = "% Processor Time";
+                instance = "_Total";
+            }
+            else
+            {
+                category = "Processor Information";
+                counter = "% Processor Utility";
+                instance = "_Total";
+            }
+
+            if (cpuCounter != null && 
+                cpuCounter.CategoryName == category && 
+                cpuCounter.CounterName == counter && 
+                cpuCounter.InstanceName == instance)
+            {
+                return;
+            }
+
+            if (cpuCounter != null)
+            {
+                cpuCounter.Dispose();
+            }
+            measurents.Clear();
+            cpuCounter = new PerformanceCounter(category, counter, instance);
+        }
+
+
         public override void ContextMenuSettings(object sender, EventArgs e)
         {
             new SettingsForm().ShowDialog();
+            settings.Reload();
+            ConfigureCpuCounter(settings.cpuUsageMetric);
             // immediatly see changes
             SetUpdateInterval(settings.updateInterval);
             UpdateIconTick();
         }
 
+
         public float GetCpuUsage()
         {
+            if (cpuCounter == null)
+            {
+                return 0;
+            }
+
             return cpuCounter.NextValue();
         }
+
 
         public override void UpdateIconTick(object sender = null, EventArgs e = null)
         {
