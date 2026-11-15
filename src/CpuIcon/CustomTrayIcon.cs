@@ -13,6 +13,8 @@ namespace CpuIcon
     {
         private CustomSettings settings;
         PerformanceCounter cpuCounter;
+        PerformanceCounter cpuPerformanceCounter;
+        int baseFrequencyMhz = -1;
         List<Tuple<float, bool>> measurents = new List<Tuple<float, bool>>();
 
         public CustomTrayIcon()
@@ -20,6 +22,15 @@ namespace CpuIcon
             settings = CustomSettings.Instance;
 
             cpuCounter = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total");
+            try
+            {
+                cpuPerformanceCounter = new PerformanceCounter("Processor Information", "% Processor Performance", "_Total");
+            }
+            catch (Exception)
+            {
+                cpuPerformanceCounter = null;
+            }
+            baseFrequencyMhz = GetBaseFrequencyMhz();
 
             SetUpdateInterval(settings.updateInterval);
             EnableIcon();
@@ -38,6 +49,48 @@ namespace CpuIcon
             return cpuCounter.NextValue();
         }
 
+        // Nominal ("base") frequency of the CPU, the value Task Manager shows as "Base speed".
+        private static int GetBaseFrequencyMhz()
+        {
+            try
+            {
+                var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT MaxClockSpeed FROM Win32_Processor");
+                foreach (ManagementObject item in searcher.Get())
+                {
+                    return Convert.ToInt32(item["MaxClockSpeed"]);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return -1;
+        }
+
+        // Current frequency, calculated the same way as Task Manager's "Speed":
+        // base frequency times "% Processor Performance", which goes above 100% while
+        // the CPU boosts. Returns -1 when the frequency can't be measured.
+        private int GetCpuFreqMhz()
+        {
+            if ((cpuPerformanceCounter == null) || (baseFrequencyMhz <= 0))
+            {
+                return -1;
+            }
+            try
+            {
+                float performance = cpuPerformanceCounter.NextValue();
+                if (performance <= 0)
+                {
+                    // no previous sample to compare with yet (first tick after start)
+                    return -1;
+                }
+                return (int)(baseFrequencyMhz * performance / 100);
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
         public override void UpdateIconTick(object sender = null, EventArgs e = null)
         {
             Color foregroundColor = settings.foregroundColor;
@@ -48,10 +101,10 @@ namespace CpuIcon
             int pointWidth = WidthSingleMeasurement();
 
             float newValue = GetCpuUsage();
-            int freq = Utils.CpuFreqMhz();
+            int freq = GetCpuFreqMhz();
 
             bool isThrottling = false;
-            if ((freq < 800) && (newValue > 40))
+            if ((freq > 0) && (freq < 800) && (newValue > 40))
             {
                 isThrottling = true;
             }
@@ -88,7 +141,11 @@ namespace CpuIcon
                     graphics.DrawRectangle(new Pen(borderColor, borderWidth), 0, 0, (int)bitmap.Width - borderWidth, (int)bitmap.Height - borderWidth);
 
                     graphics.Save();
-                    string tooltip = String.Format("CPU: {0:F0}%\nAvg: {1:F0}%\n{2} Mhz", newValue, measurents.Average(x => x.Item1), freq);
+                    string tooltip = String.Format("CPU: {0:F0}%\nAvg: {1:F0}%", newValue, measurents.Average(x => x.Item1));
+                    if (freq > 0)
+                    {
+                        tooltip += String.Format("\n{0} Mhz", freq);
+                    }
                     ChangeIcon(bitmap, tooltip);
                 }
             }
